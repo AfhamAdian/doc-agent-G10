@@ -1,4 +1,6 @@
-Header:
+=================================================================================================
+                                         Header
+=================================================================================================
 
 Member Name: Abdullah Al Mahmud
 Student Number: 2105120
@@ -6,8 +8,9 @@ Sections Led: 2, 3
 
 
 
-
-Full Conversation:
+=================================================================================================
+                                    Full Conversation
+=================================================================================================
 
 Prompt:
 Hello gemini. I am working on this project with my two teammates. The project is divided into four assignments. The first assignment is already done. We have submitted a form in .docx format for the first submission. I have shared that with you as [A1_form.pdf](file;file:///home/mahmud1628/Documents/4-1/CSE%20429/doc-agent-G10/forms/A1_form.pdf) . 
@@ -3184,3 +3187,143 @@ Is there anything else you need to wrap up the Assignment 2 phase?
 
 
 
+
+
+
+==================================================================================================
+              A Short Reflection: What did I accept, change, or reject, and why
+==================================================================================================
+
+-------------------------------------
+SECTION 2 — The Structure We Exploit:
+-------------------------------------
+
+REJECTED — the "Matra" visual structure idea:
+The AI's first proposal for "Structure in the page image" relied on the Bangla matra (top horizontal line) as the key visual cue for line segmentation. I rejected this because our textbooks are science books with heavy Bangla-Latin code-mixing (chemical formulas, equations) — Latin characters don't have matras, so that horizontal band gets broken constantly and would be an unreliable signal for our specific corpus. The AI agreed and dropped the idea.
+
+ACCEPTED — revised structural cues:
+After the correction, I accepted the reworked structure: crisp/noise-free vector-rendered edges, distinct geometric layout blocks (text vs. tables vs. figures), and later an added point about "overloaded vertical zones" (Latin sub/superscripts sharing vertical pixel space with Bangla matras) — this held up under scrutiny for our corpus.
+
+CHANGED — asked for more thoroughness before finalizing:
+When the AI offered to wrap up the first box after only two structural points, I asked it to go back and check whether we'd covered all possibilities. This led to discovering the third point (vertical zone overload) that had been missed initially.
+
+CHANGED — format:
+I asked the AI to rewrite Section 2 answers as bullet points instead of a single paragraph, for clarity in the form.
+
+
+-----------------------------------------------
+SECTION 3 — Components & Options We Considered:
+-----------------------------------------------
+
+CHANGED — how "comparison" would be done:
+The AI initially suggested most of Section 3 could be filled through architectural reasoning alone, without real testing. I pushed back — if the form asks what options we "considered," that should mean real evidence where possible, not just hypothetical reasoning. This changed our whole approach: wherever testing was feasible (Layout, OCR, Embedding), we ran real comparisons on real data instead of describing trade-offs from theory.
+
+CHANGED — testing workflow:
+I specified that I didn't want one script auto-comparing multiple tools in a single run. Instead, the AI would give me one tool's code at a time, and I would manually swap the model in the config and run it myself — this kept me in control of what was actually being tested and verified.
+
+REJECTED — jumping into coding before planning:
+When the AI wanted to start writing OCR code immediately, I stopped it and asked for a full plan first: what all of Section 3 requires across every pipeline stage, in what order, and which files needed edits — before writing any code.
+
+
+--- Layout Detection ---
+
+REJECTED — a wrong assumption about test data being ready:
+The AI assumed the `grading_kit/heldout_pages/` folder already had sample images and proposed jumping straight into model testing. I caught this — the folder was empty, and its own README explained we needed to seed it ourselves first. The AI admitted it had not actually read the files carefully and had made an assumption instead of verifying.
+
+ACCEPTED — corrected plan:
+After the correction, I accepted the fixed order of operations: download the corpus, extract sample pages ourselves, then test.
+
+REJECTED — an unverified default model:
+The AI's first layout test used a generic COCO-pretrained YOLO default, which detected zero regions on a real document page since it wasn't trained for documents at all. This was a rushed, unverified choice that produced a visible bug I had to report back before it was fixed with a proper document-layout checkpoint (YOLO11-DocLayNet).
+
+REJECTED — rushing to lock the form before discussing results:
+After I confirmed the corrected model worked, the AI immediately said we could "confidently lock in the form entry" and move to OCR. I stopped it directly ("why are you rushing? let's fill the form first, discuss what we understood") and made it write out what we actually observed (heuristic vs. YOLO11-DocLayNet trade-offs) before drafting the form text.
+
+CHANGED — expanded the test set:
+I wasn't satisfied testing on a single page, so I asked the AI to extract more pages across all three books (10 total) to make the layout comparison more valid before finalizing the choice.
+
+ACCEPTED — final choice:
+YOLO11-DocLayNet as the layout model, backed by results across 7–8 held-out pages spanning all three books, correctly isolating text/table/figure/heading regions in nearly all cases.
+
+
+--- OCR ---
+
+REJECTED — an unnecessarily narrow comparison:
+The AI initially limited the OCR comparison to just Tesseract vs. TrOCR (mirroring the form's example text almost verbatim). I rejected this narrow framing and pointed out we could compare as many tools as useful — this led to including EasyOCR, Surya OCR, and Donut as well. EasyOCR, which wasn't in the AI's original two-tool shortlist, ended up being our actual choice.
+
+ACCEPTED — including Donut as a documented rejection:
+The AI was upfront that Donut would likely fail on Bangla and wasn't architecturally a good fit, but suggested including it anyway since the form explicitly mentions it, using its failure as evidence for the rejection rationale. I accepted this reasoning, and it did fail as predicted (plus hit two dependency/compatibility bugs), which was documented in the form.
+
+CHANGED — how ground truth would be built:
+The AI first proposed manual transcription of full pages for ground truth, which I flagged as too time-consuming. It then checked whether the PDFs had an embedded text layer we could extract for free — verified this was not possible for our vector-rendered PDFs (returned 0 characters) — confirming manual work was genuinely unavoidable.
+
+CHANGED — final ground-truth strategy:
+I proposed a lighter alternative: instead of typing exact transcriptions for CER scoring, do a qualitative side-by-side comparison (image vs. OCR output) to judge accuracy on conjuncts, code-mixing, and reading order. The AI accepted this as a valid, commonly-used approach for this stage, with the caveat that a real CER number would still be needed later for Section 5.
+
+ACCEPTED (with real evidence) — EasyOCR as final choice:
+Based on my own manual test runs across multiple tools, I accepted EasyOCR over Tesseract: Tesseract preserved paragraph structure but broke badly on Latin/chemical notation (~50% error on reaction text), while EasyOCR  handled Bangla-Latin code-mixing better despite less structured output. TrOCR and Donut were rejected — no usable Bangla-capable checkpoints existed for either.
+
+REJECTED — a form-labeling error by the AI:
+The AI mixed up Section 3's "Reproduced?" column with Section 4's "Pretrained/Fine-tuned/Scratch" column, writing the wrong label. I caught this by asking directly whether it was reading the form correctly, and it corrected itself.
+
+CHANGED — bug fixes during testing:
+Several small bugs came up while running the AI's code (a `pip install` argument bug passing two package names as one string, a `DonutProcessor` compatibility flag, and a hardcoded `gpu=True` that failed on incompatible Colab GPUs, fixed to auto-detect with `torch.cuda.is_available()`). I reported the errors as they appeared and accepted the AI's fixes after verifying they worked.
+
+REJECTED — a proposed change to ocr.py:
+The AI offered to update `ocr.py`'s default model to EasyOCR before moving on. I declined — I left the file as-is so my teammates could see the actual comparison state I left behind, rather than have it silently finalized.
+
+
+--- Chunking ---
+
+CHANGED — questioned whether a comparison was even needed:
+Since semantic chunking was our assigned bonus task (E4) and would be implemented regardless of any comparison outcome, I asked the AI whether we still needed to formally compare it against fixed-size chunking. The AI argued yes — the form isn't just asking what we chose, but why it's right for our corpus — and I accepted that reasoning, keeping the comparison but scoped to reasoning-only (no code test needed, unlike Layout/OCR).
+
+ACCEPTED — semantic chunking implementation:
+Sentence-boundary chunking on Bangla danda (।) and Latin punctuation, justified by EasyOCR's lack of paragraph breaks in its output.
+
+CHANGED — added robustness the AI hadn't planned for:
+I pointed out that OCR might not always output the danda (।) correctly due to recognition errors. The AI updated the chunker to add fallback layers (pipe `|` as a common OCR substitution, newlines, and a hard word boundary fallback) — a robustness case I raised, not something proposed up front.
+
+ACCEPTED — "Reproduced?" = No:
+Since chunking was implemented from scratch (not a published/pretrained method), and the reproduction requirement was already satisfied by Layout and OCR.
+
+
+--- Embedding ---
+
+REJECTED (initially) — a premature, convenience-based conclusion:
+This was the clearest case of the AI cutting a comparison short. When LaBSE and multilingual-e5-large tied 4/4 on a small first test set, the AI immediately declared "we should choose LaBSE," justified only by its smaller vector size/efficiency — not by any accuracy advantage. I rejected this and asked for harder, more diverse test queries instead of accepting the efficiency tie-break.
+
+CHANGED — expanded testing twice:
+I asked for two additional rounds of harder queries (cross-lingual concept translation, then Romanized Bangla/Banglish and complex scientific inference) before allowing any conclusion. This mattered: the expanded tests revealed multilingual-e5-large was actually superior — e.g., correctly mapping "Formula for kinetic energy" to the right Bangla chunk where LaBSE failed and matched the wrong formula. Had I accepted the AI's first shortcut, the final embedding choice documented in the form would have been wrong.
+
+ACCEPTED — final choice:
+multilingual-e5-large, based on cumulative evidence across three rounds of increasingly difficult real retrieval tests (8/8 correct on the hardest round vs. LaBSE's 7/8).
+
+
+--- Vector Index ---
+
+ACCEPTED — reasoning-only decision, no code needed:
+Flat/exact search (FAISS IndexFlatIP) over HNSW approximate search — since our corpus (~990 pages) is small enough to fit in RAM, exact search stays instantaneous with no need to trade accuracy for HNSW's speed benefit. I accepted this as a case where empirical testing genuinely wasn't necessary, unlike Layout/OCR/Embedding.
+
+
+---------------------------
+Config & housekeeping fixes
+---------------------------
+
+ACCEPTED — layout.py bug fix:
+A default fallback model in `layout.py` didn't match the model we'd actually settled on through testing. The AI caught and fixed this before I committed.
+
+ACCEPTED — task.yaml corrections:
+The AI noticed `task.yaml` still had unedited template placeholder values (wrong group ID, wrong domain, wrong NFR, wrong latency target) and flagged it before I could commit incorrect metadata. I accepted the catch and supplied the correct values myself (group ID, NFR = auditability) rather than letting the AI guess them.
+
+ACCEPTED — license field wording:
+I didn't know how to phrase the `license` field for NCTB textbooks. I accepted the AI's suggested wording ("Copyright NCTB (Educational Use)") after it explained what a license field means in this context.
+
+ACCEPTED — design_choices.md:
+Filled in only for the stages I was responsible for (Layout, OCR, Chunking, Embedding, Index), leaving the remaining rows blank for teammates — this matched my instruction, and I accepted the result as-is.
+
+
+-------
+Summary
+-------
+Overall, most of the AI's factual/technical proposals were accepted only after being backed by real test evidence rather than pure reasoning — I pushed for actual experiments in cases where the AI first suggested we could skip them (OCR, Embedding). Several times the AI rushed toward a conclusion or a "lock it in" moment before we'd actually discussed what the results meant, and I stopped it to slow down and think it through properly. The clearest case where this mattered was the Embedding stage: accepting the AI's first proposed shortcut (choose LaBSE for efficiency after only a small tied test) would have led to documenting the wrong model in the final form.
