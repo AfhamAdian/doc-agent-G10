@@ -4,28 +4,27 @@
 # ONLY this file; it points to the rest. Build/run scripts and the eval
 # tasks are NAMED here, not copied, so they never go stale.
 
-project_id: ""              # your team id
+project_id: "G10"
 
 axes:
-  domain: ""                # your corpus subject / real user (see Roster; one per team)
-  data_speciality: ""       # ONE hard property of your corpus you are handed (see Data-Speciality Catalog)
-                            #   e.g. bangla | arabic | code-switching | degraded-scans | multi-column |
-                            #        handwritten | old-orthography | math-notation | dirty-ocr | ...
-                            #   (English is not a speciality; if your corpus is English, pick a data condition.)
-  primary_nfr: ""           # ONE quality you optimise ABOVE baseline (see NFR sheet). Faithful &
-                            #   accurate are REQUIRED of everyone (baseline), so they are NOT choices.
-  nfr_target: ""            # the concrete target you commit to for that NFR, e.g. "p95 latency <= 300ms",
-                            #   "peak RAM <= 2GB", "ECE <= 0.05", "PII recall >= 0.98"
+  domain: "nctb-science-textbooks"  # NCTB class 9-10 Physics, Chemistry, Biology textbooks (Bangla)
+  data_speciality: "bangla"         # Bangla (Bengali) script; official NCTB curriculum PDFs
+                                    #   e.g. bangla | arabic | code-switching | degraded-scans | multi-column |
+                                    #        handwritten | old-orthography | math-notation | dirty-ocr | ...
+                                    #   (English is not a speciality; if your corpus is English, pick a data condition.)
+  primary_nfr: "auditability"       # ONE quality you optimise ABOVE baseline (see NFR sheet). Faithful &
+                                    #   accurate are REQUIRED of everyone (baseline), so they are NOT choices.
+  nfr_target: "100% of returned answers have citations traceable to source page regions; no answer returned without traceable citations"
 
 corpus:
-  path: data/raw/                   # where the scanned page-images live
-  pages: 0                          # total pages  (floor: >= 300)
-  words: 0                          # total words  (floor: >= 60000)
+  path: data/raw/                   # where the scanned page-images live (biology.pdf, chemistry.pdf, physics.pdf)
+  pages: 1002                       # total pages: biology(326) + chemistry(310) + physics(366)
+  words: 229383                          # total words  (floor: >= 60000) — update after OCR pass
   provenance: data/provenance.md    # source + licence + counts
 
 heldout:
-  pages_dir: grading_kit/heldout_pages/   # page-images set aside, never OCR-trained on
-  labels:    grading_kit/labels.jsonl     # ground-truth transcriptions for those pages
+  pages_dir: grading_kit/heldout_pages/   # 9 page-images set aside, never OCR-trained on
+  labels:    grading_kit/labels.jsonl     # ground-truth transcriptions for those 9 pages
 
 entrypoints:                          # named, not duplicated (they build/run the real code)
   build_index: scripts/build_index.sh
