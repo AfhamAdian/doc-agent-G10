@@ -1,6 +1,11 @@
 data/raw/
 data/interim/
+data/index/
+data/index-pilot
 *.ckpt
 wandb/
 __pycache__/
 .venv/
+full-kb-pipeline.ipynb
+heldout_pages_bkp
+heldout_pages_bkp/*

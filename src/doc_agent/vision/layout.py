@@ -1,8 +1,11 @@
 """Stage 2 — layout detection / segmentation"""
+
 from __future__ import annotations
-from ..contracts import *  # noqa
 
 import cv2
+
+from ..config import resolve_device
+from ..contracts import Page, Region
 
 
 def detect(pages: list[Page], cfg: dict) -> list[Region]:
@@ -18,35 +21,39 @@ def detect(pages: list[Page], cfg: dict) -> list[Region]:
             if img is None:
                 continue
             h, w = img.shape[:2]
-            regions.append(Region(
-                page_id=page.id,
-                bbox=(0, 0, w, h),
-                kind="text"
-            ))
+            regions.append(Region(page_id=page.id, bbox=(0, 0, w, h), kind="text"))
 
     elif model_type == "doclayout_yolo":
         try:
-            from ultralytics import YOLO
             from huggingface_hub import hf_hub_download
-        except ImportError:
-            raise ImportError("Please run: pip install ultralytics huggingface_hub")
+            from ultralytics import YOLO
+        except ImportError as exc:
+            raise ImportError("Please run: pip install ultralytics huggingface_hub") from exc
 
         # YOLO11 fine-tuned on DocLayNet (11 region types: Text, Title, Table, Figure, etc.)
         # Repo: Armaggheddon/yolo11-document-layout on HuggingFace
-        checkpoint = cfg.get("layout", {}).get("checkpoint", None)
+        layout_cfg = cfg.get("layout", {})
+        checkpoint = layout_cfg.get("checkpoint")
         if checkpoint is None:
             checkpoint = hf_hub_download(
-                repo_id="Armaggheddon/yolo11-document-layout",
-                filename="yolo11n_doc_layout.pt",
-                repo_type="model"
+                repo_id=layout_cfg.get("repo_id", "Armaggheddon/yolo11-document-layout"),
+                filename=layout_cfg.get("checkpoint_file", "yolo11n_doc_layout.pt"),
+                repo_type="model",
             )
         model = YOLO(checkpoint)
+        device = 0 if resolve_device(cfg) == "cuda" else "cpu"
+        score_threshold = float(layout_cfg.get("score_thr", 0.5))
 
         for page in pages:
             img = cv2.imread(page.image_path)
             if img is None:
                 continue
-            results = model(page.image_path)
+            results = model(
+                page.image_path,
+                conf=score_threshold,
+                device=device,
+                verbose=False,
+            )
             for result in results:
                 for box in result.boxes:
                     x1, y1, x2, y2 = box.xyxy[0].tolist()
@@ -56,19 +63,21 @@ def detect(pages: list[Page], cfg: dict) -> list[Region]:
                     # Map DocLayNet's 11 class names to our 4 Region kinds
                     if "table" in raw_name:
                         kind = "table"
-                    elif "figure" in raw_name or "picture" in raw_name or "formula" in raw_name:
+                    elif "formula" in raw_name:
+                        kind = "text"
+                    elif "figure" in raw_name or "picture" in raw_name:
                         kind = "figure"
                     elif "title" in raw_name or "section" in raw_name or "heading" in raw_name:
                         kind = "heading"
                     else:
                         kind = "text"
 
-                    regions.append(Region(
-                        page_id=page.id,
-                        bbox=(int(x1), int(y1), int(x2), int(y2)),
-                        kind=kind
-                    ))
+                    regions.append(
+                        Region(
+                            page_id=page.id, bbox=(int(x1), int(y1), int(x2), int(y2)), kind=kind
+                        )
+                    )
     else:
         raise ValueError(f"Unknown layout model: {model_type}")
 
-    return regions
+    return sorted(regions, key=lambda region: (region.page_id, region.bbox[1], region.bbox[0]))
