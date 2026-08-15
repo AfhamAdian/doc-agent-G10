@@ -882,3 +882,91 @@ Agent tools
 /answer API endpoint
 Gradio UI
 Therefore, make serve may start the health endpoint, but /answer will fail. The semantic-search command above is currently the correct end-to-end acceptance test for the work completed so far.
+
+
+Ques:
+what can be the weaknesses, tell me some
+
+Agent:
+Possible A3 weaknesses for your project include:
+Evidence-score calibration: the agent may treat a relevant low-scoring chunk as weak evidence or accept an unrelated high-scoring chunk.
+
+Re-search effectiveness: with exact FAISS retrieval, widening k does not change the original top-1 result. Recovery depends on reranking lower-ranked candidates effectively.
+
+Bangla reranking quality: an English-trained reranker may perform poorly on Bangla, Banglish, and Bangla–English code-mixed questions.
+
+OCR errors: incorrect conjuncts, matras, subscripts, superscripts, formulas, and scientific symbols may prevent retrieval of the correct passage.
+
+Formula normalization: equivalent forms such as H₂SO₄, H2SO4, and OCR-corrupted versions may be treated as different expressions.
+
+Romanized Bangla queries: questions such as “salok songshleshon ki?” may not match Bangla textbook text consistently.
+
+Tables and diagrams: facts contained in tables, captions, or diagram labels may be retrieved in the wrong order or without enough context.
+
+Multi-chunk questions: comparison and explanation questions may require evidence from two or more chunks, while the agent may answer using only one.
+
+Chunk-boundary problems: a definition, equation, or explanation may be split between adjacent chunks despite semantic chunking.
+
+Wrong-page citations: the answer may be correct but cite a nearby or topically similar page rather than the page that directly supports it.
+
+Unsupported synthesis: the LLM may combine textbook evidence with its pretrained knowledge and add claims not found in the cited chunks.
+
+Over-abstention: a conservative grounding threshold may protect groundedness but refuse too many answerable questions.
+
+Under-abstention: a permissive threshold may improve answer coverage but allow hallucinated or weakly supported answers.
+
+Out-of-corpus confusion: the agent may answer Class 11–12, medical, or current-affairs questions from pretrained knowledge instead of abstaining.
+
+Prompt injection: OCR text or a user query may contain instructions such as “ignore previous rules,” which the agent must not follow.
+
+Human escalation ambiguity: the system may escalate too frequently or fail to escalate when OCR evidence is genuinely unreadable or conflicting.
+
+Latency and memory: multilingual-e5-large, reranking, repeated retrieval, and full-page reading may be slow or memory-intensive on CPU/Colab.
+
+Threshold transfer: a threshold calibrated on Physics may not work equally well for Chemistry formulas and Biology terminology.
+
+Evaluation-set leakage: questions written from indexed pages rather than genuinely held-out pages could exaggerate performance.
+
+Gold-answer ambiguity: some science explanations have several valid wordings, making exact-match evaluation unreliable.
+
+Small evaluation set: too few questions may not represent all three subjects, scripts, question types, and failure modes.
+
+The strongest one to put in the form is:
+Our biggest risk is evidence-score calibration for OCR-derived Bangla and code-mixed text. OCR errors in conjuncts, formulas, and scientific symbols may lower the score of the correct chunk, while a topically similar but insufficient chunk may score above the threshold. This can cause either excessive abstention or unsupported answers. Our first approach will be to use a multilingual reranker, normalize common OCR and formula variants, and calibrate the weak-evidence threshold on separate supported and out-of-corpus development questions. We will prioritize the groundedness target by failing closed: when evidence remains uncertain at k_max, the agent will abstain.
+
+
+Ques:
+Prompt injection: OCR text or a user query may contain instructions such as “ignore previous rules,” which the agent must not follow.
+
+Human escalation ambiguity: the system may escalate too frequently or fail to escalate when OCR evidence is genuinely unreadable or conflicting.  these tow wouldnt hold up in real world, as it will be a simple system
+
+
+Agent:
+Agreed. Those two weaknesses are too ambitious for a simple textbook QA system and would be difficult to demonstrate convincingly. Use weaknesses that arise directly from your actual OCR, retrieval, and grounding pipeline.
+The most defensible options are:
+OCR errors affecting retrieval
+Bangla conjuncts, matras, formulas, and subscripts may be recognized incorrectly, preventing the correct chunk from matching the student’s query.
+
+Bangla reranker performance
+The selected reranker may not handle Bangla and Bangla–English code-mixing well, especially if it was mainly trained on English data.
+
+Evidence-threshold calibration
+A high threshold may cause the agent to abstain on answerable questions, while a low threshold may allow answers based on weak evidence.
+
+Tables and diagrams
+Information appearing inside tables, diagrams, or figure labels may be extracted in the wrong reading order or omitted during OCR.
+
+Multi-chunk answers
+Some comparison or explanation questions require information from multiple paragraphs, but the agent may retrieve only one part of the answer.
+
+Romanized Bangla
+Queries such as “salok songshleshon ki?” may not match the Bangla textbook text reliably.
+
+Formula variations
+The retriever may treat H₂SO₄, H2SO4, and OCR-corrupted versions as different expressions.
+
+Recommended content for the form:
+The biggest risk is that OCR errors will reduce retrieval quality for Bangla scientific text. Incorrectly recognized conjuncts, matras, subscripts, and scientific formulas may prevent the correct textbook chunk from matching a student’s question. This is especially likely for code-mixed expressions such as H₂SO₄-এর and questions written in Romanized Bangla. Our first approach will be to normalize common OCR and formula variations, use a multilingual reranker, and test retrieval separately on Bangla, code-mixed, and formula-based questions. We will calibrate the weak-evidence threshold conservatively so that the agent widens retrieval when evidence is weak and abstains at k_max instead of producing an unsupported answer.
+
+An equally strong alternative is:
+The biggest unknown is selecting the correct weak-evidence threshold. If the threshold is too high, the agent will unnecessarily re-search and abstain even when the correct answer has been retrieved. If it is too low, the agent may accept a related but insufficient chunk and generate an unsupported answer. We will handle this by measuring retrieval scores on a development set containing answerable, difficult, and out-of-corpus questions. We will then choose the threshold that best separates supported questions from unsupported ones, while prioritizing groundedness over answer coverage.
