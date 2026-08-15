@@ -23,8 +23,8 @@ corpus:
   provenance: data/provenance.md    # source + licence + counts
 
 heldout:
-  pages_dir: grading_kit/heldout_pages/   # 9 page-images set aside, never OCR-trained on
-  labels:    grading_kit/labels.jsonl     # ground-truth transcriptions for those 9 pages
+  pages_dir: grading_kit/heldout_pages/   # 3 page-images set aside, never OCR-trained on
+  labels:    grading_kit/labels.jsonl     # ground-truth transcriptions for those 3 pages
 
 entrypoints:                          # named, not duplicated (they build/run the real code)
   build_index: scripts/build_index.sh
