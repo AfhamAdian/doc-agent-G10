@@ -970,3 +970,44 @@ The biggest risk is that OCR errors will reduce retrieval quality for Bangla sci
 
 An equally strong alternative is:
 The biggest unknown is selecting the correct weak-evidence threshold. If the threshold is too high, the agent will unnecessarily re-search and abstain even when the correct answer has been retrieved. If it is too low, the agent may accept a related but insufficient chunk and generate an unsupported answer. We will handle this by measuring retrieval scores on a development set containing answerable, difficult, and out-of-corpus questions. We will then choose the threshold that best separates supported questions from unsupported ones, while prioritizing groundedness over answer coverage.
+
+
+=================================================================================================
+                                    A short Reflection
+=================================================================================================
+
+Reflecting on the Bangla Textbook QA Agent: Insights and Adjustments
+
+Building the Bangla Textbook QA Agent has been a challenging and rewarding experience. The project brought together techniques from natural language processing, retrieval systems, and modern AI architectures. Here are some of my key insights and adjustments along the way:
+
+1. The Importance of Multilingual Embeddings
+
+From the beginning, I knew the agent needed to handle both Bangla and English. Initially, I considered using an English-only model and translating queries. However, it quickly became clear that this would introduce unnecessary errors and latency. I adjusted my approach to use multilingual embeddings (multilingual-e5-base) to allow for direct retrieval using Bangla queries.
+
+2. Dealing with OCR Challenges
+
+OCR is a major hurdle for Indic scripts. I expected some errors, but the reality of Bangla conjuncts and matras was more complex than I anticipated. Early experiments showed that even small OCR mistakes could significantly degrade retrieval performance. This led to my focus on normalization strategies and the need for a reranker to improve recall.
+
+3. Reranking as a Necessity, Not a Luxury
+
+I initially thought that a good embedding model and FAISS index might be enough. However, I realized that without reranking, the agent could not reliably handle the nuances of Bangla and code-mixed queries. The reranker became a critical component for improving groundedness.
+
+4. The Delicate Balance of Threshold Calibration
+
+Deciding where to set the evidence threshold was one of the hardest decisions. A high threshold ensures safety but leads to excessive abstention. A low threshold increases answer coverage but risks hallucination. I adjusted my approach based on the evaluation results, ultimately prioritizing groundedness over answer coverage.
+
+5. Recognizing the Limits of the System
+
+As the project progressed, I became more aware of the system's limitations. The current implementation relies on static OCR and fixed chunking, which are not ideal for dynamic environments. I also recognized that the evaluation set, while useful, was not perfectly representative of all possible Bangla textbook questions.
+
+Future Work
+
+Looking ahead, I see several areas for improvement:
+
+• Dynamic OCR: Implementing OCR directly within the agent to handle on-the-fly queries
+• Better chunking: Exploring semantic chunking strategies to improve retrieval
+• Advanced reranking: Experimenting with Bangla-specific rerankers
+• End-to-end evaluation: Developing a more comprehensive evaluation framework
+
+Overall, the project reinforced the importance of iterative development and the need to constantly adapt based on experimental results. While there are still challenges to address, I am confident that the current architecture provides a strong foundation for building robust multilingual RAG systems.
+
