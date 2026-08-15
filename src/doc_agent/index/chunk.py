@@ -1,10 +1,11 @@
 """Stage 4 — chunk text"""
+
 from __future__ import annotations
-from ..contracts import *  # noqa
 
+import hashlib
 import re
-import uuid
 
+from ..contracts import Chunk
 
 # ---------------------------------------------------------------------------
 # Sentence splitting — robust against OCR inaccuracies
@@ -18,14 +19,19 @@ import uuid
 # the entire page to become one un-splittable blob.
 # ---------------------------------------------------------------------------
 _SENTENCE_BOUNDARY = re.compile(
-    r'(?<=[।॥\|\.\!\?])\s+'   # after danda, double-danda, pipe, or Latin end marks
-    r'|\n{2,}'                  # or after a blank line (paragraph break from Tesseract)
-    r'|\n'                      # or after any newline
+    r"(?<=[।॥\|\.\!\?])\s+"  # after danda, double-danda, pipe, or Latin end marks
+    r"|\n{2,}"  # or after a blank line (paragraph break from Tesseract)
+    r"|\n"  # or after any newline
 )
 
 # Hard fallback: if no boundary found, split every FALLBACK_CHARS characters
 # at the nearest word boundary so we don't cut mid-word.
 FALLBACK_CHARS = 300
+
+
+def _stable_chunk_id(source: Chunk, ordinal: int, text: str) -> str:
+    identity = f"{source.id}|{ordinal}|{'|'.join(source.page_ids)}|{text}"
+    return "chunk-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:20]
 
 
 def _split_sentences(text: str) -> list[str]:
@@ -81,6 +87,7 @@ def split(chunks: list[Chunk], cfg: dict) -> list[Chunk]:
 
     for chunk in chunks:
         sentences = _split_sentences(chunk.text)
+        ordinal = 0
 
         if not sentences:
             continue
@@ -95,12 +102,15 @@ def split(chunks: list[Chunk], cfg: dict) -> list[Chunk]:
             # If adding this sentence would overflow, flush and start a new chunk
             if current_sentences and current_len + sentence_len + 1 > max_chars:
                 new_text = " ".join(current_sentences)
-                result.append(Chunk(
-                    id=str(uuid.uuid4()),
-                    doc_id=chunk.doc_id,
-                    text=new_text,
-                    page_ids=chunk.page_ids,
-                ))
+                result.append(
+                    Chunk(
+                        id=_stable_chunk_id(chunk, ordinal, new_text),
+                        doc_id=chunk.doc_id,
+                        text=new_text,
+                        page_ids=chunk.page_ids,
+                    )
+                )
+                ordinal += 1
 
                 # Overlap: keep trailing sentences whose total length < overlap_chars
                 overlap_sentences: list[str] = []
@@ -120,11 +130,14 @@ def split(chunks: list[Chunk], cfg: dict) -> list[Chunk]:
 
         # Flush any remaining sentences as the final chunk
         if current_sentences:
-            result.append(Chunk(
-                id=str(uuid.uuid4()),
-                doc_id=chunk.doc_id,
-                text=" ".join(current_sentences),
-                page_ids=chunk.page_ids,
-            ))
+            final_text = " ".join(current_sentences)
+            result.append(
+                Chunk(
+                    id=_stable_chunk_id(chunk, ordinal, final_text),
+                    doc_id=chunk.doc_id,
+                    text=final_text,
+                    page_ids=chunk.page_ids,
+                )
+            )
 
     return result
