@@ -1,0 +1,972 @@
+=================================================================================================
+                                         Header
+=================================================================================================
+
+Member Name: Mohammed Afham Adian
+Student Number: 2105119
+Sections Led: 4, 6
+
+
+
+=================================================================================================
+                                    Full Conversation
+=================================================================================================
+Ques : read the @doc-agent-starter/README.md  and do what says there then give me comprehensive sumamary of what i have to do. THen tell me in order what i have to do after what. No need  to code anything now.
+
+Agent : 
+ File  doc-agent-starter/README.md 
+- Thought: 481ms
+The user wants me to read the README.md and do what it says, then give a comprehensive summary and ordered steps. Let me first explore the doc-agent-starter directory structure to understand what's there.
+
+Let me look at the directory structure and the key files mentioned: SUBMISSION.md, handbook/01-START-HERE.pdf, etc.
+
+Let me explore the folder structure first.
+I'll explore the repo structure and read the referenced files first.
+Read doc-agent-starter 
+Read doc-agent-starter/SUBMISSION.md 
++ Thought: 656ms
+Let me read the handbook files and other key docs.
+Read doc-agent-starter/handbook 
+Read doc-agent-starter/STRUCTURE.md 
+Read doc-agent-starter/forms 
+Read doc-agent-starter/Makefile 
++ Thought: 444ms
+Let me read the markdown handbooks and the PDFs.
+Read doc-agent-starter/handbook/03-Project-Specification.md 
+Read doc-agent-starter/handbook/05-Codebase-Guide.md 
+Read doc-agent-starter/handbook/01-START-HERE.pdf 
++ Thought: 1.9s
+The PDFs can't be read directly by this model. Let me extract their text via command-line tools and check the current repo state.
+$ which pdftotext python3 pipx uv; echo "---"; ls -la /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/.git 2>/dev/null || echo "no .git"
+/usr/bin/pdftotext
+/usr/bin/python3
+/usr/bin/pipx
+/home/afham-adian/.local/bin/uv
+---
+no .git
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && git status 2>&1 | head -20
+fatal: not a git repository (or any of the parent directories): .git
++ Thought: 552ms
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/handbook && pdftotext -layout 01-START-HERE.pdf - 2>&1
+Deep-Learning Capstone — Full Package
+Every group builds the same system — an Agentic-RAG agent over scanned books —
+differentiated across three axes (domain × data speciality × primary NFR) so no two projects
+converge.
+
+Read in this order
+  1.   02-How-To-Submit — how you hand work in (a GitHub repo, tagged at each
+       milestone). Read this first.
+  2.   03-Project-Specification — the whole system: pipeline, the three axes, the regulated-
+       repo design, tiers, anti-copying.
+…
+Click to expand
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/handbook && pdftotext -layout 02-How-To-Submit.pdf - 2>&1
+How to submit (read once, follow every milestone)
+Your team submits one GitHub repository, marked at four points (A1–A4). You never upload
+a zip. Your commit history is your submission — it shows what you did and when.
+
+One-time setup (start of the course)
+  1.   Download the starter zip from Moodle and unzip it (you get the doc-agent-starter
+       folder). Then create a NEW, EMPTY GitHub repository — do NOT add a README
+       or .gitignore, the folder already has them. Name it doc-agent-<your team id>
+       (e.g. doc-agent-G07). Make it Public — REQUIRED (a private repo cannot be graded
+       and counts as no submission). Then turn the unzipped folder into that repo and push: git
+…
+Click to expand
++ Thought: 386ms
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/handbook && pdftotext -layout 04-Project-Walkthrough.pdf - 2>&1 | head -200
+Project Guide
+A plain-English walkthrough of every assignment question — A1 to A4
+
+
+This guide assumes you have never built a system like this before. For every question in the four assignment forms,
+it explains what the question is really asking, the choices you have and when to pick each, and gives a worked
+example. One example team runs through the whole guide so the pieces connect into one project.
+
+
+Part 0 — The big picture (start here)
+…
+Click to expand
+$ python3 -c "import openpyxl; print('openpyxl ok')" 2>&1; python3 -c "import pandas; print('pandas ok')" 2>&1
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'openpyxl'
+pandas ok
++ Thought: 6.2s
+Let me read the workbook, the rest of the walkthrough, and the A2 form.
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && python3 -c "
+import pandas as pd
+xl = pd.ExcelFile('handbook/06-Group-Assignment-Workbook.xlsx')
+for s in xl.sheet_names:
+    print('=== SHEET:', s, '===')
+    df = xl.parse(s)
+    pd.set_option('display.max_colwidth', 120)
+    pd.set_option('display.width', 250)
+    print(df.head(60).to_string())
+    print('rows:', len(df))
+" 2>&1 | head -300
+Traceback (most recent call last):
+  File "/home/afham-adian/.local/lib/python3.12/site-packages/pandas/compat/_optional.py", line 158, in import_optional_dependency
+    module = importlib.import_module(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1324, in _find_and_load_unlocked
+…
+Click to expand
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/handbook && pdftotext -layout 04-Project-Walkthrough.pdf - 2>&1 | sed -n '200,520p'
+Section 3 — What the data shows (15 points)
+From your exploration notebook (a document that runs your data-inspection code top to bottom). Report what you
+actually found.
+
+Three real findings
+List three concrete things about your corpus — page-size spread, variety of fonts, how many pages are damaged,
+and so on.
+Example (Team G07) “About 15% of pages are foxed; three distinct typefaces appear; the median page has ~190 words.”
+
+What each finding means for your build
+…
+Click to expand
++ Thought: 742ms
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/handbook && pdftotext -layout 04-Project-Walkthrough.pdf - 2>&1 | sed -n '520,760p'
+Result vs. baseline
+Show, with numbers, that your real agent beats the lazy baseline you named in A1.
+Example (Team G07) Baseline (top chunk verbatim) 0.41 answer-F1 → our agent 0.79.
+
+One change test (an “ablation”)
+An ablation means switching off one component to see how much it mattered. Toggle one piece off and report the
+change — this proves the piece earns its place.
+Example (Team G07) Turning off the reranker drops recall@5 from 0.86 to 0.75 — so the reranker is worth its cost.
+
+
+…
+Click to expand
+$ pip install --quiet openpyxl python-docx 2>&1 | tail -2; python3 -c "import openpyxl, docx; print('ok')"
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'openpyxl'
++ Thought: 1.6s
+The system Python is externally managed. I'll use uv to read the workbook and the form.
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && uv run --with openpyxl python -c "
+import pandas as pd
+xl = pd.ExcelFile('handbook/06-Group-Assignment-Workbook.xlsx')
+print('SHEETS:', xl.sheet_names)
+for s in xl.sheet_names:
+    print('='*20, 'SHEET:', s, '='*20)
+    df = xl.parse(s)
+    pd.set_option('display.max_colwidth', 150)
+    pd.set_option('display.width', 300)
+    pd.set_option('display.max_rows', 100)
+    print(df.head(80).to_string())
+    print('... total rows:', len(df))
+" 2>&1 | head -400
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
++ Thought: 554ms
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && uv run --with openpyxl python -c "
+import pandas as pd
+xl = pd.ExcelFile('handbook/06-Group-Assignment-Workbook.xlsx')
+print('SHEETS:', xl.sheet_names)
+for s in xl.sheet_names:
+    print('='*20, 'SHEET:', s, '='*20)
+    df = xl.parse(s)
+    pd.set_option('display.max_colwidth', 150)
+    pd.set_option('display.width', 300)
+    pd.set_option('display.max_rows', 100)
+    print(df.head(80).to_string())
+    print('... total rows:', len(df))
+" 2>&1 | head -400
+Downloading nvidia-cublas-cu12 (391.6MiB)
+Downloading nvidia-cufft-cu12 (116.0MiB)
+Downloading torch (743.0MiB)
+Downloading nvidia-nccl-cu12 (168.1MiB)
+Downloading nvidia-cudnn-cu12 (697.8MiB)
+Downloading nvidia-cusolver-cu12 (118.4MiB)
+Downloading nvidia-cusparse-cu12 (186.9MiB)
+ Downloaded nvidia-cufft-cu12
+ Downloaded nvidia-cusolver-cu12
+ Downloaded nvidia-nccl-cu12
+…
+Click to expand
++ Thought: 1.1s
+$ df -h /home /tmp / 2>&1; echo "---"; du -sh /home/afham-adian/.cache/uv 2>/dev/null; du -sh /home/afham-adian/Downloads/doc-agent-template 2>/dev/null
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p5   69G   64G  1.3G  99% /
+/dev/nvme0n1p5   69G   64G  1.3G  99% /
+/dev/nvme0n1p5   69G   64G  1.3G  99% /
+---
+3.7G	/home/afham-adian/.cache/uv
+1.9M	/home/afham-adian/Downloads/doc-agent-template
++ Thought: 2.8s
+The disk is 99% full (1.3 GB free) and the failed torch download is in the uv cache. Let me prune the cache to reclaim space, then read the workbook with a tiny isolated env.
+$ uv cache prune 2>&1; df -h / | tail -1
+Pruning cache at: /home/afham-adian/.cache/uv
+Removed 888 files (1.0GiB)
+/dev/nvme0n1p5   69G   63G  2.3G  97% /
+$ cd /tmp && python3 -m venv /tmp/xlvenv 2>&1 && /tmp/xlvenv/bin/pip install --quiet openpyxl python-docx 2>&1 | tail -1; /tmp/xlvenv/bin/python -c "import openpyxl, docx; print('ok')"
+ok
+$ /tmp/xlvenv/bin/python -c "
+import pandas as pd
+xl = pd.ExcelFile('/home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/handbook/06-Group-Assignment-Workbook.xlsx')
+print('SHEETS:', xl.sheet_names)
+for s in xl.sheet_names:
+    print('='*20, 'SHEET:', s, '='*20)
+    df = xl.parse(s)
+    pd.set_option('display.max_colwidth', 160)
+    pd.set_option('display.width', 320)
+    pd.set_option('display.max_rows', 120)
+    print(df.head(100).to_string())
+    print('--- total rows:', len(df))
+" 2>&1 | head -500
+Traceback (most recent call last):
+  File "<string>", line 2, in <module>
+ModuleNotFoundError: No module named 'pandas'
++ Thought: 265ms
+$ /tmp/xlvenv/bin/pip install --quiet pandas 2>&1 | tail -1; /tmp/xlvenv/bin/python -c "import pandas; print('pandas ok')"
+pandas ok
+$ /tmp/xlvenv/bin/python -c "
+import pandas as pd
+xl = pd.ExcelFile('/home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/handbook/06-Group-Assignment-Workbook.xlsx')
+print('SHEETS:', xl.sheet_names)
+for s in xl.sheet_names:
+    print('='*20, 'SHEET:', s, '='*20)
+    df = xl.parse(s)
+    pd.set_option('display.max_colwidth', 160)
+    pd.set_option('display.width', 320)
+    pd.set_option('display.max_rows', 120)
+    print(df.head(100).to_string())
+    print('--- total rows:', len(df))
+" 2>&1 | head -600
+SHEETS: ['README', 'Domain', 'Data Speciality', 'NFR', 'Data Sources', 'Build · Mandatory', 'Build · Optional Bonus']
+==================== SHEET: README ====================
+                                                                                                                                Group Assignment Workbook — 3-axis design
+0                                                                                                                                                                     NaN
+1                                                                                                                                                                     NaN
+2              …
+Click to expand
++ Thought: 931ms
+Now let me read the A2 form, configs, grading_kit, and check what's already in the repo.
+$ /tmp/xlvenv/bin/python -c "
+import docx
+d = docx.Document('/home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/forms/A2_form.docx')
+print('PARAGRAPHS:')
+for p in d.paragraphs:
+    if p.text.strip():
+        print(p.text)
+print()
+print('TABLES:')
+for i, t in enumerate(d.tables):
+    print(f'--- table {i} ---')
+    for row in t.rows:
+        cells = [c.text.strip().replace(chr(10),' / ') for c in row.cells]
+        print(' | '.join(cells))
+" 2>&1 | head -200
+PARAGRAPHS:
+Assignment 2 — Build Your Knowledge Base
+Team of 3 · Milestone 2 of 4 · Type your answers directly in the blank cells — they grow as you type.
+Team members
+In 'Worked sections', list the sections each member led. Every section must be owned by someone; each member submits the AI-chat behind their own sections (Section 8).
+Section 1 — Recap from Assignment 1
+Copy these from A1 so this form stands alone. Do NOT change the success metric — your system in A3 is judged on it.
+Section 2 — The Structure We Exploit
+Every model choice is a bet on structure in the data. Name the structure your pipeline relies on, and the things it must ignore.
+Section 3 — Components & Options We Considered
+…
+Click to expand
+Read doc-agent-starter/grading_kit 
+Read doc-agent-starter/configs 
+Read doc-agent-starter/data 
++ Thought: 626ms
+Let me check the current state of the stub files to see what's filled in vs empty.
+Read doc-agent-starter/configs/task.yaml 
+Read doc-agent-starter/configs/config.yaml 
+Read doc-agent-starter/data/provenance.md 
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && ls -la data/raw/ notebooks/ 2>&1; echo "---"; cat grading_kit/manifest.yaml 2>&1; echo "---"; wc -l grading_kit/tasks.jsonl grading_kit/labels.jsonl 2>&1; echo "---"; ls src/doc_agent/
+data/raw/:
+total 12
+drwxr-xr-x 2 afham-adian afham-adian 4096 Jul  4 23:19 .
+drwxr-xr-x 3 afham-adian afham-adian 4096 Jul  3 19:22 ..
+-rw-r--r-- 1 afham-adian afham-adian  138 Jul  4 23:19 .gitkeep
+
+notebooks/:
+total 16
+drwxr-xr-x  2 afham-adian afham-adian 4096 Jul  4 14:57 .
+drwxr-xr-x 19 afham-adian afham-adian 4096 Aug  9 16:05 ..
+…
+Click to expand
++ Thought: 957ms
+Let me check the state of the source stubs and remaining deliverable stubs.
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && grep -rl "# IMPLEMENT" src/doc_agent | head -50; echo "=== total IMPLEMENT markers ==="; grep -rc "# IMPLEMENT" src/doc_agent | awk -F: '$2>0' | wc -l; echo "=== grading_kit files ==="; cat grading_kit/tasks.jsonl grading_kit/labels.jsonl; echo "=== scripts ==="; ls scripts/; echo "=== reports ==="; ls reports/ reports/figures 2>&1; echo "=== github ==="; ls .github/workflows/ 2>&1; echo "=== traces/transcripts ==="; ls traces transcripts 2>&1
+src/doc_agent/agent/tools.py
+src/doc_agent/agent/agent.py
+=== total IMPLEMENT markers ===
+2
+=== grading_kit files ===
+{"id":"t1","question":"","verifiable":true,"judged":false,"gold":"","gold_pages":[],"needs_research":false}
+# One line per eval item. Student-authored, grounded in YOUR corpus.
+# needs_research: true  = a TRIGGER item whose answer is NOT on the top chunk, so the agent MUST re-search.
+#                 false = a CONTROL item answerable from the top chunk (single pass).
+# REQUIRED: at least one {needs_research:true, needs_research:false} PAIR (the A3 agentic gate reads these).
+…
+Click to expand
++ Thought: 10.5s
+Let me verify what a git commit would include (check .gitignore) and confirm the setup tooling state.
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && cat .gitignore; echo "=== du top-level ==="; du -sh --exclude=.git . 2>/dev/null | tail -1; echo "=== dvc ==="; ls .dvc/ 2>&1; du -sh .dvc 2>/dev/null
+data/raw/
+data/interim/
+*.ckpt
+wandb/
+__pycache__/
+.venv/
+=== du top-level ===
+1.9M	.
+=== dvc ===
+config
+…
+Click to expand
++ Thought: 755ms
+The folder is small (1.9 MB) and data/raw/ is gitignored, so an initial commit is safe. Let me do the one-time git setup the README/SUBMISSION.md instructs (local steps; remote/push need your GitHub account).
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && git init -b main 2>&1 && git config user.name 2>&1; git config user.email 2>&1
+Initialized empty Git repository in /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/.git/
+Afham Adian
+afhamadian.03@gmail.com
++ Thought: 1.7s
+Git is initialized with your identity. Let me verify what will be committed (no secrets/large files), then make the initial commit.
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && git add . && git status --short | head -60 && echo "=== count ===" && git status --short | wc -l
+A  .dvc/config
+A  .editorconfig
+A  .env.example
+A  .github/CODEOWNERS
+A  .github/pull_request_template.md
+A  .github/workflows/cd.yml
+A  .github/workflows/ci.yml
+A  .github/workflows/security.yml
+A  .gitignore
+A  .pre-commit-config.yaml
+…
+Click to expand
++ Thought: 333ms
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && git commit -m "initial commit" -q && git log --oneline -1
+813f11d initial commit
++ Thought: 1.3s
+Now let me check how much of the code is already implemented vs stubs.
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/src/doc_agent && wc -l ingest/*.py vision/*.py index/*.py retrieval/*.py llm/*.py agent/*.py | sort -n | head -40
+0 agent/__init__.py
+    0 index/__init__.py
+    0 ingest/__init__.py
+    0 llm/__init__.py
+    0 retrieval/__init__.py
+    0 vision/__init__.py
+    8 index/chunk.py
+    8 index/embed.py
+    8 ingest/loader.py
+    8 ingest/preprocess.py
+…
+Click to expand
+Read doc-agent-starter/src/doc_agent/ingest/loader.py 
+Read doc-agent-starter/src/doc_agent/agent/tools.py 
++ Thought: 958ms
+Let me verify the install footprint so I can flag the disk-space constraint accurately.
+$ cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter && grep -E '^(name|version|requires-python|dependencies)' pyproject.toml | head -30; echo "=== torch in lock ==="; grep -iE 'torch|tensorflow|faiss' requirements.lock | head; echo "=== free space ==="; df -h / | tail -1
+name = "doc-agent"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+=== torch in lock ===
+=== free space ===
+/dev/nvme0n1p5   69G   61G  4.2G  94% /
++ Thought: 11.8s
+Done — I followed the README's instructions as far as they can go on your machine. Here's the full picture.
+What I already did ("do what it says")
+Read SUBMISSION.md, the handbook (01–06), the workbook, the A2 form, and mapped the whole repo.
+Initialized git and made the initial commit (git init -b main → 813f11d). Repo name, remote, push, and teammates are the only steps left that need your GitHub account.
+The situation
+2026 cohort: A1 is already done (submitted on Moodle). Your first tag is a2-submit.
+Everything is still a stub: data/raw/ is empty (no corpus), configs/task.yaml has placeholder values (G00, reproducible), provenance.md/grading_kit//notebooks are blank, and all src/ functions raise NotImplementedError.
+⚠️ Disk is 94% full (~4 GB free). make setup (uv sync) must download torch (~2.5 GB+), which will likely fail. Free space before installing.
+The one project you're building
+A scanned-document Agentic-RAG agent: raw page image → read it → find it → answer with citations. Everyone builds the same pipeline; your uniqueness comes from three axes you must choose: Domain × Data speciality × Primary NFR+target (pick from the workbook sheets). Faithful + accurate is the baseline for everyone.
+What you have to do, in order
+Step 0 — Submission setup (immediate, needs you)
+1. Create a public GitHub repo named doc-agent-<team id> (no README/.gitignore/license).
+2. git remote add origin <url> then git push -u origin main.
+3. Add 2 teammates as collaborators; send the instructor the URL.
+4. Free disk space, then make setup (pinned lockfile).
+Step 1 — A1 artifacts (graded first at A2)
+ 5. configs/task.yaml — your domain, data speciality, primary NFR + target, corpus source/licence.
+ 6. configs/config.yaml — model/params per stage (OCR, embed, index, retrieve).
+ 7. data/provenance.md — source, licence, page/word counts.
+ 8. scripts/get_data.sh → download a scanned corpus (Internet Archive/HathiTrust; not Gutenberg) into data/raw/ — ≥300 pages AND ≥60k words. It's gitignored, so only the fetch script is committed.
+ 9. notebooks/eda.ipynb — corpus exploration = your difficulty analysis.
+10. grading_kit/manifest.yaml — declare the 3 axes, point to corpus/heldout/build commands.
+11. grading_kit/heldout_pages/ + labels.jsonl — hand-transcribe held-out pages (the oracle).
+12. data/validate.py (validate()), data/versioning.py (snapshot()), logging_conf.py + .env.
+13. transcripts/<student number>.txt ×3.
+Step 2 — A2: build the knowledge base (in this order)
+14. ingest/loader.py → preprocess.py (deskew/denoise/binarize) → vision/layout.py → vision/ocr.py (fine-tune a pretrained OCR) → index/chunk.py → index/embed.py → index/store.py (vector index).
+15. Then only your gated items: data-speciality (e.g. enhancement, multi-column, HTR, script-tuned OCR) and NFR (semantic chunking or HNSW/IVF).
+16. scripts/build_index.sh, notebooks/kb_demo.ipynb (OCR quality + 1 retrieval), reports/pipeline_diagram.md, configs/design_choices.md (8-facet table).
+17. make seed && make ingest && make index, keep make lint && make test green.
+18. Fill forms/A2_form.docx (8 sections, incl. ≥1 reproduced pretrained method), commit, then:
+git tag a2-submit && git push origin main --tags
+Step 3 — A3: agent + evaluation
+19. Retriever → LLM client/prompts → the 9 fixed tools → agent decide()/act()/synthesize() with the mandatory evidence-gated re-search (widen k on weak score, abstain at k_max) → grounding/citations → tracing (traces/run.jsonl) → eval metrics → tasks.jsonl + success_check.py (incl. a needs_research:true/false pair) → ablation → tag a3-submit.
+Step 4 — A4: ship & govern
+20. Serving API + Gradio UI + Docker, MLOps tracking, model card, robustness/PII/fairness, final report + brochure + demo/video, principle scan (≥8 decisions → principles) → tag a4-submit.
+Next concrete action you can take right now: create the GitHub repo and tell me the team id, and I'll wire the remote, do the push, and start on the A1-fill + corpus-download steps.
+
+
+Ques;
+how about i build the index in kaggle and only download it here to test the while app? can i do that ?
+
+
+Agent :
+Yes—you can build the FAISS index on Kaggle’s GPU and download the finished index to test locally. That’s a sensible workflow.
+On Kaggle:
+Upload/clone the repository and provide the PDFs under data/raw/.
+Enable a GPU accelerator.
+Set:
+device: cuda
+
+pilot:
+  enabled: false
+Install and build:
+pip install -e .
+python scripts/run_index.py
+Download the complete index directory:
+tar -czf /kaggle/working/doc-agent-index.tar.gz -C data index
+Locally, extract it from the repository root:
+tar -xzf ~/Downloads/doc-agent-index.tar.gz -C data
+You should then have:
+data/index/
+├── index.faiss
+├── chunks.jsonl
+└── metadata.json
+Keep all three files together. Also ensure the local configuration uses exactly the same embedding model and dimension:
+embed:
+  model: "intfloat/multilingual-e5-large"
+  dim: 1024
+
+index:
+  type: "flat"
+  path: "data/index"
+Important caveats:
+Local query processing still loads multilingual-e5-large, because every user question must be embedded using the same model. Kaggle eliminates the expensive document indexing work, but not query embedding.
+Use compatible faiss-cpu versions on Kaggle and locally; this project expects >=1.8,<1.9.
+If you leave pilot.enabled: true, Kaggle writes to data/index-pilot, not data/index. You would need to copy that directory and change index.path locally.
+The current repository cannot yet test the whole application end-to-end: retrieval, reranking, agent logic, tools, and the /answer endpoint still contain NotImplementedError. The downloaded index can be loaded and tested, but those later stages must be implemented before the complete app works.
+
+
+
+
+Ques : can i clone this full github repo in kaggle?
+
+
+Agent : 
+Yes. If the GitHub repository is public, run this in a Kaggle notebook cell:
+!git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+%cd YOUR_REPO
+Then install it:
+!pip install -e .
+Before building the full index, update configs/config.yaml:
+device: cuda
+
+pilot:
+  enabled: false
+Then run:
+!python scripts/run_index.py
+A few important points:
+Only committed and pushed files are cloned. Your current local uncommitted changes will not appear on Kaggle.
+Files ignored by Git—probably the textbook PDFs in data/raw/—must be uploaded separately, ideally as a private Kaggle Dataset.
+Enable GPU and Internet access in the Kaggle notebook settings so it can download the E5, EasyOCR, and layout-model weights.
+Your repository’s README says the final GitHub repository must be public, so public cloning is likely the simplest approach.
+Do not commit model weights, raw books, API keys, or generated page images to GitHub.
+After building, package the index:
+!tar -czf /kaggle/working/doc-agent-index.tar.gz -C data index
+The archive will appear in the notebook’s Output section for download.
+
+Ques : 
+i got a tar. gz index. how would I get to downlaod this index in my repo app?
+
+
+
+
+
+
+10:03 PM
+
+
+
+
+
+
+Since you already downloaded the archive, extract it into your local repository’s data/ directory.
+Run locally:
+cd /home/afham-adian/Downloads/doc-agent-template/doc-agent-starter
+
+tar -tzf ~/Downloads/doc-agent-physics-50-page-index.tar.gz
+
+mkdir -p data
+tar -xzf ~/Downloads/doc-agent-physics-50-page-index.tar.gz -C data
+Verify:
+ls -lh data/index-pilot
+You should see:
+index.faiss
+chunks.jsonl
+metadata.json
+Then update configs/config.yaml so the app loads this pilot index:
+index:
+  type: flat
+  path: data/index-pilot
+  chunk_size: 500
+  chunk_overlap: 50
+You can test loading it without modifying the configuration first:
+PYTHONPATH=src .venv/bin/python - <<'PY'
+from doc_agent import config
+from doc_agent.index.store import load
+
+cfg = config.load()
+cfg["index"]["path"] = "data/index-pilot"
+
+vector_store = load(cfg)
+
+print("Index loaded successfully")
+print("Number of chunks:", len(vector_store))
+PY
+If .venv/bin/python does not exist, use:
+PYTHONPATH=src python3 - <<'PY'
+from doc_agent import config
+from doc_agent.index.store import load
+
+cfg = config.load()
+cfg["index"]["path"] = "data/index-pilot"
+
+vector_store = load(cfg)
+print("Index loaded successfully")
+print("Number of chunks:", len(vector_store))
+PY
+The embedding settings must remain identical to Kaggle:
+embed:
+  model: intfloat/multilingual-e5-large
+  dim: 1024
+If the index loads but the full app raises NotImplementedError, that comes from unfinished retrieval/agent/serving code, not from the downloaded index.
+
+
+Ques:
+okay but for the embed.py, for implementing it there, how will i run the model? will i run it locally or in gpu?
+
+Agent:
+short answer: CPU is enough — and on this machine it's the only option (no nvidia-smi, no GPU). But the code should support both automatically.
+Facts from the environment:
+- Your .venv is empty (make setup / uv sync --frozen hasn't run) — step 0 before anything: install deps. That's also the reason the template pins torch, sentence-transformers, faiss-cpu (CPU build) in pyproject.toml.
+- The model all-MiniLM-L6-v2 is ~22M params / 90 MB — built for CPU. Your corpus contract (≥300 pages, 60k words) at 256-token chunks is only 600 chunks; CPU embedding takes seconds. No GPU needed.
+- config.yaml:3 has a global device: cuda — template default. Don't hardcode it; resolve at runtime.
+Recommended pattern in embed.py:
+import torch
+from sentence_transformers import SentenceTransformer
+
+def _device(cfg):
+    want = cfg.get("device", "cpu")
+    return want if torch.cuda.is_available() else "cpu"   # auto-fallback
+
+model = SentenceTransformer(cfg["embed"]["model"], device=_device(cfg))
+vecs = model.encode([c.text for c in chunks], batch_size=64, show_progress_bar=False)
+- SentenceTransformer(...) auto-uses GPU when device="cuda" and CUDA exists (e.g. Colab/your A3 training box) → code is portable, no changes needed.
+- You should not run the model yourself / manually — the library wraps it; the only manual parts are: resolve device (above), L2-normalize rows for cosine scores, return (N, 384) float32.
+- First run downloads weights from HuggingFace (~90 MB, cached in ~/.cache/huggingface); afterwards it runs offline — so run it once before your demo/no-network situations.
+- Same pattern will be reused in retriever.py for the query embedding (one SentenceTransformer instance is fine there too — it's cheap).
+So: encode() reads cfg["device"], falls back to CPU, and it will genuinely run on CPU here.
+
+
+Ques: 
+THEN WHERE will i store this embedding 
+
+Agent:
+you store it on disk in data/index/ via FAISS — that's the build() side effect. Layout:
+data/index/
+├── index.faiss    # the actual float32 vectors, in a FAISS HNSW graph (binary, ~N×384×4 bytes)
+├── chunks.jsonl   # chunk metadata (id, doc_id, text, page_ids) — index row i ↔ line i
+└── meta.json      # dim, model name, count (reproducibility)
+FAISS holds the vectors (that's its whole job); the JSONL sidecar keeps the text/doc info so load() can map a vector back to a Chunk. Retriever.__init__ calls store.load(cfg) and reads both back. You never touch .faiss directly — faiss.read_index() / write_index().
+Now implementing. Let me start with the dependency install and the four files in order.
+
+Ques:
+tell me waht would i do with build_index.sh now ? what should it do ?
+
+Agent:
+build_index.sh should build the knowledge base from the raw PDFs. It should not load the downloaded .tar.gz index.
+Its intended flow is:
+data/raw/*.pdf
+  → render pages
+  → layout detection
+  → EasyOCR
+  → chunk text
+  → E5 embeddings
+  → FAISS index
+  → data/index*/ files
+Your current script already invokes this pipeline once:
+python scripts/run_index.py
+For your downloaded 50-page pilot
+Do not run build_index.sh. The index is already built and extracted under:
+data/index-pilot/
+Load it using:
+cfg["index"]["path"] = "data/index-pilot"
+vector_store = store.load(cfg)
+For reproducing the 50-page pilot
+Ensure the Physics PDF exists:
+bash scripts/get_data.sh physics
+Configure:
+pilot:
+  enabled: true
+  books: ["physics"]
+  max_pages_per_book: 50
+  index_path: "data/index-pilot"
+Then run:
+PYTHON=.venv/bin/python bash scripts/build_index.sh
+This will rebuild and overwrite the pilot index using local compute.
+For the final graded build
+Configure:
+pilot:
+  enabled: false
+
+index:
+  type: flat
+  path: data/index
+Download all books:
+bash scripts/get_data.sh
+Then run on Kaggle or another GPU machine:
+bash scripts/build_index.sh
+Expected output:
+data/index/
+├── index.faiss
+├── chunks.jsonl
+└── metadata.json
+The final metadata must satisfy the assignment minimums:
+At least 300 usable pages
+At least 60,000 OCR words
+More than one source document
+No held-out pages
+Recommended script contract
+Keep build_index.sh simple:
+Resolve the repository root.
+Select the configured Python environment.
+Set PYTHONPATH.
+Run scripts/run_index.py once.
+Exit nonzero on failure.
+Produce the index at the configured path.
+That is already what your current script does. Loading belongs in store.load() and later in Retriever, not in build_index.sh. Your 50-page tarball is a development artifact; the script is the reproducible way to generate it again.
+
+Ques:
+ok, make the build_ondex.sh accordingly then
+
+
+Agent:
+Updated [scripts/build_index.sh](/home/afham-adian/Downloads/doc-agent-template/doc-agent-starter/scripts/build_index.sh).
+It now:
+Selects $PYTHON, .venv/bin/python, python3, or python
+Checks configuration and required packages before expensive work
+Builds from the configured raw corpus
+Loads and validates the generated index afterward
+Verifies model, dimension, chunk count, and pilot status
+Prints a build summary
+Is executable
+Validation completed:
+Shell syntax: passed
+Diff check: passed
+Index tests: 6 passed
+Executable permission: set
+I did not run the full build locally because it would rerun OCR/E5 and the machine currently lacks sufficient capacity. Run it on Kaggle with:
+./scripts/build_index.sh
+No commit or push was perform
+
+
+Ques :
+I have to laod the index with build_index.sh plan me how would i do that ?
+
+Agent:
+build_index.sh currently builds a new index from PDFs—it does not load an existing index. Loading is performed by store.load().
+The clean plan is to give build_index.sh two modes while preserving its existing grading behavior:
+./scripts/build_index.sh        # Build normally
+./scripts/build_index.sh build  # Build explicitly
+./scripts/build_index.sh load   # Load and validate existing index
+Implementation plan:
+Update scripts/build_index.sh to accept build or load.
+
+Keep build as the default so the grading entrypoint remains unchanged:
+
+./scripts/build_index.sh
+Add a --load-only option to scripts/run_index.py.
+
+In load mode, select the correct directory:
+
+pilot:
+  enabled: true
+  index_path: data/index-pilot
+Call:
+vector_store = store.load(cfg)
+Validate:index.faiss exists
+chunks.jsonl exists
+FAISS vector count equals chunk count
+Dimension is 1024
+Embedding model is intfloat/multilingual-e5-large
+Index type is flat
+
+Print a summary such as:
+Loaded index successfully
+Path: data/index-pilot
+Pages: 47
+Chunks: 295
+Dimension: 1024
+Model: intfloat/multilingual-e5-large
+Add tests verifying both modes and ensuring load mode never runs OCR or embeddings.
+Then your local workflow becomes:
+chmod +x scripts/build_index.sh
+./scripts/build_index.sh load
+Important: this pilot contains only 47 usable pages and 9,415 OCR words. It is suitable for development testing but does not satisfy the final grading minimum of 300 pages and 60,000 words. The final full index must still be built from all required books.
+No files were changed for this plan. If you want, I can implement the two-mode behavior next without committing anything.
+
+
+Ques:
+if you donw load the 2.2gb model will it hold in my current cacptiy? will eveyrthing hold in my current capcaity? also can i delete the everyhting relted to these mdeols and oterh things after work is done?
+
+Agent:
+No—your machine currently does not have enough safe capacity for multilingual-e5-large.
+Current resources:
+Disk free: 1.6 GB
+RAM available: approximately 1.5 GB
+Swap available: approximately 1.9 GB
+E5 model download: roughly 2.2 GB, with additional temporary/cache space
+Recommended free disk: at least 5 GB
+Recommended available RAM: roughly 4–6 GB
+The semantic-search command was interrupted before downloading the model and is no longer running. It appears to have left no partial Hugging Face model cache.
+The full tests did complete successfully:
+21 passed, 9 skipped, 0 failed
+Best option now
+Run the semantic-search test on Kaggle. Kaggle already downloaded the E5 model while building the index and has sufficient RAM/GPU capacity. Running it locally right now risks filling the disk or causing heavy swapping.
+Can everything be deleted afterward?
+Yes. Model downloads are caches and can be deleted after testing. However, once deleted, you cannot process another query locally without downloading the same model again.
+Typical removable model locations are:
+~/.cache/huggingface/hub/models--intfloat--multilingual-e5-large/
+~/.cache/torch/sentence_transformers/
+~/.EasyOCR/
+Kaggle stores these inside its temporary session, so they disappear when the Kaggle session is deleted unless you explicitly save them as notebook output.
+Your small index should be retained:
+data/index-pilot/index.faiss
+data/index-pilot/chunks.jsonl
+data/index-pilot/metadata.json
+It is only about 1.4 MB total.
+Recoverable local space
+Your largest disposable cache is:
+~/.cache/uv    approximately 3 GB
+It can normally be cleared with:
+uv cache clean
+Your browser caches also occupy about:
+Brave cache          1.1 GB
+Google Chrome cache  1.2 GB
+Clear those through the browsers’ settings. Do not delete .cache/codex-runtimes while using Codex because it may disrupt the current environment.
+Even after freeing disk space, the limited RAM makes E5-large uncomfortable locally. Kaggle is the safer place for semantic testing. If you later want a lightweight local application, you would need to choose a smaller embedding model and rebuild the entire index with that same model.
+
+
+Ques:
+ok now how would i test the whole pipeline done uptill now
+
+
+Agent:
+ou can currently test the completed pipeline through Stage 4:
+Extracted OCR chunks → query embedding → FAISS search → actual chunk text
+I already verified:
+Index integrity: passed
+FAISS/chunk mapping: passed
+Index loading: passed
+Stage 1–4 data tests: 6 passed
+1. Run all completed-stage tests
+From the repository root:
+PYTHONPATH=src .venv/bin/python -m pytest \
+  tests/test_ingest.py \
+  tests/test_ocr.py \
+  tests/test_data.py \
+  -v
+2. Run a real semantic-search test
+This will download multilingual-e5-large locally the first time. It is a large model, so the initial run may take time and several GB of storage.
+PYTHONPATH=src .venv/bin/python - <<'PY'
+from doc_agent import config
+from doc_agent.index import embed, store
+
+QUERY = "ভৌত রাশি এবং পরিমাপ বলতে কী বোঝায়?"
+
+cfg = config.load()
+
+# Test the downloaded Kaggle index
+cfg["index"]["path"] = "data/index-pilot"
+
+# Use CPU locally
+cfg["device"] = "cpu"
+
+print("Embedding query...")
+query_vector = embed.encode_query(QUERY, cfg)
+
+print("Loading FAISS index...")
+vector_store = store.load(cfg)
+
+print("Searching...")
+results = vector_store.search(query_vector, k=5)
+
+assert results, "FAIL: no chunks were retrieved"
+assert all(result.text.strip() for result in results)
+assert all(result.page_ids for result in results)
+assert all(
+    results[i].score >= results[i + 1].score
+    for i in range(len(results) - 1)
+), "FAIL: results are not sorted by similarity"
+
+print("\nPASS: semantic retrieval completed")
+print("Query:", QUERY)
+
+for rank, chunk in enumerate(results, start=1):
+    print("\n" + "=" * 70)
+    print(f"Rank: {rank}")
+    print(f"Score: {chunk.score:.4f}")
+    print(f"Chunk ID: {chunk.id}")
+    print(f"Document: {chunk.doc_id}")
+    print(f"Pages: {chunk.page_ids}")
+    print(f"Text: {chunk.text}")
+PY
+A successful result should return chunks discussing physical quantities, measurements, units, or the first Physics chapter.
+3. Test the chunk-to-vector mapping
+PYTHONPATH=src .venv/bin/python - <<'PY'
+import json
+from pathlib import Path
+
+import faiss
+import numpy as np
+
+index_dir = Path("data/index-pilot")
+
+index = faiss.read_index(str(index_dir / "index.faiss"))
+
+with (index_dir / "chunks.jsonl").open(encoding="utf-8") as file:
+    chunks = [json.loads(line) for line in file if line.strip()]
+
+assert index.ntotal == len(chunks)
+assert index.d == 1024
+
+for position in [0, len(chunks) // 2, len(chunks) - 1]:
+    vector = index.reconstruct(position)
+    chunk = chunks[position]
+
+    assert vector.shape == (1024,)
+    assert np.isclose(np.linalg.norm(vector), 1.0, atol=1e-3)
+
+    print(
+        f"PASS position={position}, "
+        f"chunk={chunk['id']}, "
+        f"norm={np.linalg.norm(vector):.4f}"
+    )
+
+print(f"\nPASS: all {len(chunks)} chunks have matching FAISS positions")
+PY
+What cannot be tested yet
+The complete query-to-answer web application cannot run because these later stages still contain NotImplementedError:
+Retriever.retrieve()
+Reranking
+Agent decision and synthesis
+Agent tools
+/answer API endpoint
+Gradio UI
+Therefore, make serve may start the health endpoint, but /answer will fail. The semantic-search command above is currently the correct end-to-end acceptance test for the work completed so far.
+
+
+Ques:
+what can be the weaknesses, tell me some
+
+Agent:
+Possible A3 weaknesses for your project include:
+Evidence-score calibration: the agent may treat a relevant low-scoring chunk as weak evidence or accept an unrelated high-scoring chunk.
+
+Re-search effectiveness: with exact FAISS retrieval, widening k does not change the original top-1 result. Recovery depends on reranking lower-ranked candidates effectively.
+
+Bangla reranking quality: an English-trained reranker may perform poorly on Bangla, Banglish, and Bangla–English code-mixed questions.
+
+OCR errors: incorrect conjuncts, matras, subscripts, superscripts, formulas, and scientific symbols may prevent retrieval of the correct passage.
+
+Formula normalization: equivalent forms such as H₂SO₄, H2SO4, and OCR-corrupted versions may be treated as different expressions.
+
+Romanized Bangla queries: questions such as “salok songshleshon ki?” may not match Bangla textbook text consistently.
+
+Tables and diagrams: facts contained in tables, captions, or diagram labels may be retrieved in the wrong order or without enough context.
+
+Multi-chunk questions: comparison and explanation questions may require evidence from two or more chunks, while the agent may answer using only one.
+
+Chunk-boundary problems: a definition, equation, or explanation may be split between adjacent chunks despite semantic chunking.
+
+Wrong-page citations: the answer may be correct but cite a nearby or topically similar page rather than the page that directly supports it.
+
+Unsupported synthesis: the LLM may combine textbook evidence with its pretrained knowledge and add claims not found in the cited chunks.
+
+Over-abstention: a conservative grounding threshold may protect groundedness but refuse too many answerable questions.
+
+Under-abstention: a permissive threshold may improve answer coverage but allow hallucinated or weakly supported answers.
+
+Out-of-corpus confusion: the agent may answer Class 11–12, medical, or current-affairs questions from pretrained knowledge instead of abstaining.
+
+Prompt injection: OCR text or a user query may contain instructions such as “ignore previous rules,” which the agent must not follow.
+
+Human escalation ambiguity: the system may escalate too frequently or fail to escalate when OCR evidence is genuinely unreadable or conflicting.
+
+Latency and memory: multilingual-e5-large, reranking, repeated retrieval, and full-page reading may be slow or memory-intensive on CPU/Colab.
+
+Threshold transfer: a threshold calibrated on Physics may not work equally well for Chemistry formulas and Biology terminology.
+
+Evaluation-set leakage: questions written from indexed pages rather than genuinely held-out pages could exaggerate performance.
+
+Gold-answer ambiguity: some science explanations have several valid wordings, making exact-match evaluation unreliable.
+
+Small evaluation set: too few questions may not represent all three subjects, scripts, question types, and failure modes.
+
+The strongest one to put in the form is:
+Our biggest risk is evidence-score calibration for OCR-derived Bangla and code-mixed text. OCR errors in conjuncts, formulas, and scientific symbols may lower the score of the correct chunk, while a topically similar but insufficient chunk may score above the threshold. This can cause either excessive abstention or unsupported answers. Our first approach will be to use a multilingual reranker, normalize common OCR and formula variants, and calibrate the weak-evidence threshold on separate supported and out-of-corpus development questions. We will prioritize the groundedness target by failing closed: when evidence remains uncertain at k_max, the agent will abstain.
+
+
+Ques:
+Prompt injection: OCR text or a user query may contain instructions such as “ignore previous rules,” which the agent must not follow.
+
+Human escalation ambiguity: the system may escalate too frequently or fail to escalate when OCR evidence is genuinely unreadable or conflicting.  these tow wouldnt hold up in real world, as it will be a simple system
+
+
+Agent:
+Agreed. Those two weaknesses are too ambitious for a simple textbook QA system and would be difficult to demonstrate convincingly. Use weaknesses that arise directly from your actual OCR, retrieval, and grounding pipeline.
+The most defensible options are:
+OCR errors affecting retrieval
+Bangla conjuncts, matras, formulas, and subscripts may be recognized incorrectly, preventing the correct chunk from matching the student’s query.
+
+Bangla reranker performance
+The selected reranker may not handle Bangla and Bangla–English code-mixing well, especially if it was mainly trained on English data.
+
+Evidence-threshold calibration
+A high threshold may cause the agent to abstain on answerable questions, while a low threshold may allow answers based on weak evidence.
+
+Tables and diagrams
+Information appearing inside tables, diagrams, or figure labels may be extracted in the wrong reading order or omitted during OCR.
+
+Multi-chunk answers
+Some comparison or explanation questions require information from multiple paragraphs, but the agent may retrieve only one part of the answer.
+
+Romanized Bangla
+Queries such as “salok songshleshon ki?” may not match the Bangla textbook text reliably.
+
+Formula variations
+The retriever may treat H₂SO₄, H2SO4, and OCR-corrupted versions as different expressions.
+
+Recommended content for the form:
+The biggest risk is that OCR errors will reduce retrieval quality for Bangla scientific text. Incorrectly recognized conjuncts, matras, subscripts, and scientific formulas may prevent the correct textbook chunk from matching a student’s question. This is especially likely for code-mixed expressions such as H₂SO₄-এর and questions written in Romanized Bangla. Our first approach will be to normalize common OCR and formula variations, use a multilingual reranker, and test retrieval separately on Bangla, code-mixed, and formula-based questions. We will calibrate the weak-evidence threshold conservatively so that the agent widens retrieval when evidence is weak and abstains at k_max instead of producing an unsupported answer.
+
+An equally strong alternative is:
+The biggest unknown is selecting the correct weak-evidence threshold. If the threshold is too high, the agent will unnecessarily re-search and abstain even when the correct answer has been retrieved. If it is too low, the agent may accept a related but insufficient chunk and generate an unsupported answer. We will handle this by measuring retrieval scores on a development set containing answerable, difficult, and out-of-corpus questions. We will then choose the threshold that best separates supported questions from unsupported ones, while prioritizing groundedness over answer coverage.
