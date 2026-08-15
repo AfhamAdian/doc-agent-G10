@@ -1,5 +1,6 @@
 data/raw/
 data/interim/
+data/index/
 *.ckpt
 wandb/
 __pycache__/
